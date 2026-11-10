@@ -56,9 +56,17 @@ class _MainShellState extends State<MainShell> {
             ),
             ListTile(
               leading: const Icon(Icons.table_chart),
-              title: const Text('Student Records'),
+              title: const Text('Records'),
               onTap: () {
                 _select(2);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.school),
+              title: const Text('Programmes'),
+              onTap: () {
+                _select(3);
                 Navigator.pop(context);
               },
             ),
