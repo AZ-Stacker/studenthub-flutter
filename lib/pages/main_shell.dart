@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:studenthub/pages/about_page.dart';
 import 'package:studenthub/pages/home_page.dart';
 import 'package:studenthub/pages/programme_page.dart';
 import 'package:studenthub/pages/records_page.dart';
 import 'package:studenthub/pages/settings_page.dart';
 import 'package:studenthub/pages/student_list_page.dart';
+import 'package:studenthub/providers/navigation_provider.dart';
 
-class MainShell extends StatefulWidget {
+class MainShell extends StatelessWidget {
   const MainShell({super.key});
-
-  @override
-  State<MainShell> createState() => _MainShellState();
-}
-
-class _MainShellState extends State<MainShell> {
-  int currentIndex = 0;
 
   static const _pages = [
     HomePage(),
@@ -23,15 +18,25 @@ class _MainShellState extends State<MainShell> {
     ProgrammePage(),
   ];
 
-  void _select(int index) => setState(() => currentIndex = index);
+  void _select(BuildContext context, int index) =>
+      context.read<NavigationProvider>().select(index);
 
-  void _open(Widget page) {
+  void _selectAndClose(BuildContext context, int index) {
+    _select(context, index);
+    Navigator.pop(context);
+  }
+
+  void _open(BuildContext context, Widget page) {
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute<void>(builder: (_) => page));
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = context.select<NavigationProvider, int>(
+      (nav) => nav.currentIndex,
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text('StudentHub')),
       drawer: Drawer(
@@ -41,44 +46,32 @@ class _MainShellState extends State<MainShell> {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Home'),
-              onTap: () {
-                _select(0);
-                Navigator.pop(context);
-              },
+              onTap: () => _selectAndClose(context, 0),
             ),
             ListTile(
               leading: const Icon(Icons.people),
               title: const Text('Student Information'),
-              onTap: () {
-                _select(1);
-                Navigator.pop(context);
-              },
+              onTap: () => _selectAndClose(context, 1),
             ),
             ListTile(
               leading: const Icon(Icons.table_chart),
               title: const Text('Records'),
-              onTap: () {
-                _select(2);
-                Navigator.pop(context);
-              },
+              onTap: () => _selectAndClose(context, 2),
             ),
             ListTile(
               leading: const Icon(Icons.school),
               title: const Text('Programmes'),
-              onTap: () {
-                _select(3);
-                Navigator.pop(context);
-              },
+              onTap: () => _selectAndClose(context, 3),
             ),
             ListTile(
               leading: const Icon(Icons.info),
               title: const Text('About'),
-              onTap: () => _open(const AboutPage()),
+              onTap: () => _open(context, const AboutPage()),
             ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
-              onTap: () => _open(const SettingsPage()),
+              onTap: () => _open(context, const SettingsPage()),
             ),
           ],
         ),
@@ -86,7 +79,7 @@ class _MainShellState extends State<MainShell> {
       body: _pages[currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
-        onDestinationSelected: _select,
+        onDestinationSelected: (index) => _select(context, index),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.people), label: 'Students'),
