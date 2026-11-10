@@ -55,8 +55,13 @@ class MainShell extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.table_chart),
-              title: const Text('Student Records'),
+              title: const Text('Records'),
               onTap: () => _selectAndClose(context, 2),
+            ),
+            ListTile(
+              leading: const Icon(Icons.school),
+              title: const Text('Programmes'),
+              onTap: () => _selectAndClose(context, 3),
             ),
             ListTile(
               leading: const Icon(Icons.info),
