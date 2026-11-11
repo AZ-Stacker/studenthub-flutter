@@ -38,8 +38,8 @@ class _StudentListPageState extends State<StudentListPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 0, 106, 255),
-              ),
+                  color: Color.fromARGB(255, 0, 106, 255),
+                ),
               ),
               const SizedBox(height: 6),
               Text(
